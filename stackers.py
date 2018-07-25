@@ -13,26 +13,36 @@ class stack():
         self.gaming = True
 
     def startGame(self):
-        pygame.time.set_timer(USEREVENT +1, 80)
+        pygame.time.set_timer(USEREVENT +1, 170)
         x = 0        
         y = 0
+        previous_y = -1
         velocity = 1
         while self.gaming:
             for event in pygame.event.get():                 
                     if event.type == KEYDOWN:
+                        if previous_y == -1:
+                            previous_y = y
+                        elif not (previous_y == y):
+                            sense.show_message("You Lose!", 0.05, (255, 255, 0), (255, 0, 0))
+                            self.gaming = False
+                            sense.clear()
+                            exit()
                         sense.set_pixel(x, y, (0, 0, 255))
-                        self.gaming = False
-                 #       x += 1
-                    #    if x == 8:
-                       #     self.gaming = False
+                        x += 1
+                        if x == 8:
+                            sense.show_message("You Win!", 0.05, (255, 255, 0), (0, 0, 255))
+                            self.gaming = False
+                            sense.clear()
+                            exit()
                     else:
                         sense.set_pixel(x, y, (0, 0, 255))
-                        time.sleep(0.05)
+                        time.sleep(0.13)
                         sense.set_pixel(x, y, (0, 0, 0))
                         y += velocity
                         if y == 8:
                             y = 0
-                    
+
 if __name__ == "__main__":
     try:
         game = stack()
